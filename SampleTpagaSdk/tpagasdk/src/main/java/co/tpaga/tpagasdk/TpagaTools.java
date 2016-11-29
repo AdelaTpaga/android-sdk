@@ -42,4 +42,8 @@ public class TpagaTools {
         int duration = Toast.LENGTH_LONG;
         Toast.makeText(context, i, duration).show();
     }
+
+    public static void showToast(Context context, CharSequence msg) {
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+    }
 }

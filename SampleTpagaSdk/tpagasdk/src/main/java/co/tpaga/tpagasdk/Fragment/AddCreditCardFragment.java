@@ -1,6 +1,7 @@
 package co.tpaga.tpagasdk.Fragment;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -29,7 +30,7 @@ import co.tpaga.tpagasdk.TpagaTools;
 import io.card.payment.CardIOActivity;
 import io.card.payment.CreditCard;
 
-public class AddCreditCardFragment extends Fragment implements View.OnClickListener, AddCreditCardView, TextWatcher {
+public class AddCreditCardFragment extends Fragment implements View.OnClickListener, TextWatcher {
     public static final String TAG = AddCreditCardFragment.class.getSimpleName();
 
     private TextInputLayout ccNumberTil;
@@ -42,12 +43,14 @@ public class AddCreditCardFragment extends Fragment implements View.OnClickListe
     private TextInputLayout cvvTil;
     private EditText cvv;
 
-
     private TextInputLayout nameTil;
     private EditText name;
 
     private ImageButton scanButton;
     private Button requestButton;
+
+    private AddCreditCardView mAddCreditCardView;
+    private AddCreditCardPresenter mAddCreditCardPresenter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,17 +77,6 @@ public class AddCreditCardFragment extends Fragment implements View.OnClickListe
         requestButton.setOnClickListener(this);
     }
 
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        name.setText("");
-        cvv.setText("");
-        cc_number.setText("");
-        year.setSelection(0);
-        month.setSelection(0);
-    }
-
     private void setSpinnerMonths() {
         ArrayList<String> months = new ArrayList<String>();
         for (int i = 1; i <= 12; i++) {
@@ -107,18 +99,24 @@ public class AddCreditCardFragment extends Fragment implements View.OnClickListe
         adapterYears.notifyDataSetChanged();
     }
 
-    public void onScanPress() {
-        Tpaga.scanCard(getActivity());
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        name.setText("");
+        cvv.setText("");
+        cc_number.setText("");
+        year.setSelection(0);
+        month.setSelection(0);
     }
+
 
     @Override
     public void onClick(View view) {
         int i = view.getId();
         if (i == R.id.bt_scan_card) {
-            onScanPress();
+            Tpaga.scanCard(getActivity());
         } else if (i == R.id.bt_add_cc_request) {
             onClickAddCC();
-        } else {
         }
     }
 
@@ -127,22 +125,36 @@ public class AddCreditCardFragment extends Fragment implements View.OnClickListe
             showToastMsg();
             return;
         }
-        onClickCreateAccount();
-    }
+        mAddCreditCardPresenter.tokenizeCreditCard();
 
-    @Override
-    public void onClickCreateAccount() {
-//        mPresenter.saveCreditCardTpaga();
+//        Tpaga.tpagaApi.addCreditCard(getCC()).enqueue(new Callback<CreditCardResponseTpaga>() {
+//            @Override
+//            public void onResponse(Call<CreditCardResponseTpaga> call, Response<CreditCardResponseTpaga> response) {
+//                if (response.isSuccessful()) {
+//                    mAddCreditCardView.onResponseSuccessfulOfAddCreditCard(response.body().toCreditCardWallet());
+//                    return;
+//                }
+//                if (response.code() >= 500) {
+//                    mAddCreditCardView.showError(GenericResponse.create(StatusResponse.create(response.code(), getString(R.string.error_to_connect_with_server))));
+//                } else {
+//                    mAddCreditCardView.showError(GenericResponse.create(StatusResponse.create(response.code(), getString(R.string.error_to_add_cc))));
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<CreditCardResponseTpaga> call, Throwable t) {
+//                mAddCreditCardView.showError(t);
+//            }
+//        });
     }
 
     public CreditCardTpaga getCC() {
-        CreditCardTpaga creditCardTpaga = CreditCardTpaga.create(
+        return CreditCardTpaga.create(
                 cc_number.getText().toString().replaceAll("\\s+", ""),
                 year.getText().toString(),
                 month.getText().toString(),
                 cvv.getText().toString(),
                 name.getText().toString());
-        return creditCardTpaga;
     }
 
     public boolean validateFieldsCC() {
@@ -191,12 +203,10 @@ public class AddCreditCardFragment extends Fragment implements View.OnClickListe
 
     @Override
     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
     }
 
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
     }
 
     @Override
@@ -219,47 +229,20 @@ public class AddCreditCardFragment extends Fragment implements View.OnClickListe
         }
     }
 
-    //
-//    @Override
-//    public void saveCreditCardSuccess(Account account) {
-//        LogTPaga.d(TAG, "apiTappsiSignUp success! id" + account.data.token);
-//        Storage.setAccounts(account.data.paymentAccounts);
-//        getActivity().popBackStackSecure(AddCreditCardFragment.TAG);
-//        getActivity().getmAccountsFragment().refreshAccounts();
-//        getActivity().refreshFragment(getActivity().getPaymentMethodFragment());
-//        getActivity().refreshFragment(getActivity().getmAccountsFragment());
-//        getActivity().showSnackLong(R.string.msg_account_success);
-//        clear();
-//    }
-//
-//    @Override
-//    public void showResponseError(Throwable t) {
-//        getActivity().apiFailure(t);
-//    }
-//
-//    @Override
-//    public void showLoader(@StringRes int msg) {
-//        getActivity().showLoaderWallet(msg);
-//    }
-//
-//    @Override
-//    public void dismissLoader() {
-//        getActivity().dismissLoaderWallet();
-//    }
-//
-//    @Override
-//    public void showRetry() {
-//        getActivity().startRetryViewActivity();
-//    }
-//
-//    @Override
-//    public void showError(GenericResponse genericResponse) {
-//        getActivity().showToastError(genericResponse.status);
-//    }
-//
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mAddCreditCardView = (AddCreditCardView) context;
+            mAddCreditCardPresenter = new AddCreditCardPresenter(mAddCreditCardView, Tpaga.tpagaApi);
+
+        } catch (ClassCastException castException) {
+            /** The activity does not implement the AddCreditCardView listener. */
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case Tpaga.SCAN_CREDIT_CARD:
                 if (resultCode == 13274388) {

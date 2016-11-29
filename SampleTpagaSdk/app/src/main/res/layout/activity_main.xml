@@ -10,8 +10,19 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="co.tpaga.sampletpagasdk.MainActivity">
 
-    <TextView
+    <Button
+        android:id="@+id/button_without_ui"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="ADD CREDIT CARD WITHOUT UI" />
+
+    <Button
+        android:id="@+id/button_with_ui"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button_without_ui"
+        android:layout_centerHorizontal="true"
+        android:text="ADD CREDIT CARD WITH UI" />
 </RelativeLayout>

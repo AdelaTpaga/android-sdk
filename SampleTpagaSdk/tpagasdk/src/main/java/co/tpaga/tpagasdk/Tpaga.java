@@ -5,9 +5,21 @@ import android.app.Activity;
 import android.content.Intent;
 
 import co.tpaga.tpagasdk.Entities.CreditCardTpaga;
+import co.tpaga.tpagasdk.Network.TpagaAPI;
 import io.card.payment.CardIOActivity;
 
 public class Tpaga {
+
+    public static TpagaAPI tpagaApi;
+
+    private Tpaga(String tpagaPublicApiKey, int enviroment) {
+        tpagaApi = TpagaAPI.initialize(tpagaPublicApiKey, enviroment);
+
+    }
+
+    public static Tpaga initialize(String tpagaPublicApiKey, int enviroment) {
+        return new Tpaga(tpagaPublicApiKey, enviroment);
+    }
 
     /*request code for scan card*/
     public static final int SCAN_CREDIT_CARD = 1126;
@@ -29,6 +41,4 @@ public class Tpaga {
                 && !creditCard.cvc.isEmpty()
                 && TpagaTools.isNameValid(creditCard.cardHolderName);
     }
-
-
 }

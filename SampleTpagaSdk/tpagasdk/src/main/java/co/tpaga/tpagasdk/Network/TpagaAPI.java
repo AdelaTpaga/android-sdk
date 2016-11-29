@@ -1,7 +1,5 @@
 package co.tpaga.tpagasdk.Network;
 
-import android.content.Context;
-
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 
@@ -29,20 +27,21 @@ public class TpagaAPI {
     private static final String SANDBOX_TPAGA_API_HOST = "https://sandbox.tpaga.co/api/";
     private static final String PRODUCTION_TPAGA_API_HOST = "https://api.tpaga.co/api/";
 
-    private final ManageCreditCard mManageCreditCard;
-    private Context context;
-    private final String tpagaPublicApiKey;
+    private static ManageCreditCard mManageCreditCard;
+    private String tpagaPublicApiKey;
     private int enviroment;
 
-    public TpagaAPI(Context context, String tpagaPublicApiKey, int enviroment) {
-        this.context = context;
+    private TpagaAPI(String tpagaPublicApiKey, int enviroment) {
         this.tpagaPublicApiKey = tpagaPublicApiKey;
         this.enviroment = enviroment;
-
         mManageCreditCard = getAuthAdapter().create(ManageCreditCard.class);
     }
 
-    public Retrofit getAuthAdapter() {
+    public static TpagaAPI initialize(String tpagaPublicApiKey, int enviroment) {
+        return new TpagaAPI(tpagaPublicApiKey, enviroment);
+    }
+
+    private Retrofit getAuthAdapter() {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
@@ -64,7 +63,7 @@ public class TpagaAPI {
     }
 
     public Call<CreditCardResponseTpaga> addCreditCard(CreditCardTpaga creditCard) {
-        return mManageCreditCard.addCreditCard(creditCard);
+        return mManageCreditCard.addCreditCardPost(creditCard);
     }
 
     public GenericResponse errorResponse(ResponseBody errorBody) {
@@ -76,9 +75,9 @@ public class TpagaAPI {
         }
     }
 
-    public interface ManageCreditCard {
-        @POST("tokenize/credit_card")
-        Call<CreditCardResponseTpaga> addCreditCard(@Body CreditCardTpaga appInfo);
-    }
 
+    private interface ManageCreditCard {
+        @POST("tokenize/credit_card")
+        Call<CreditCardResponseTpaga> addCreditCardPost(@Body CreditCardTpaga appInfo);
+    }
 }

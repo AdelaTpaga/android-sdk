@@ -15,4 +15,6 @@
     <string name="fail_validate_year_cc">Verify year</string>
     <string name="fail_validate_cvc_cc">Verify cvv</string>
     <string name="fail_validate_name_cc">Verify name in the card</string>
+    <string name="error_to_add_cc">Error agregando tarjeta de credito</string>
+    <string name="error_to_connect_with_server">Error conectando con el servidor</string>
 </resources>
