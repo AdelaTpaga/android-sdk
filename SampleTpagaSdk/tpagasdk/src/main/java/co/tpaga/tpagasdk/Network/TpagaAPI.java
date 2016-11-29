@@ -24,14 +24,14 @@ public class TpagaAPI {
 
     public static final int SANDBOX = 1000;
     public static final int PRODUCTION = 2000;
-    private static final String SANDBOX_TPAGA_API_HOST = "https://sandbox.tpaga.co/api/";
-    private static final String PRODUCTION_TPAGA_API_HOST = "https://api.tpaga.co/api/";
+    protected static final String SANDBOX_TPAGA_API_HOST = "https://sandbox.tpaga.co/api/";
+    protected static final String PRODUCTION_TPAGA_API_HOST = "https://api.tpaga.co/api/";
 
     private static ManageCreditCard mManageCreditCard;
     private String tpagaPublicApiKey;
     private int enviroment;
 
-    private TpagaAPI(String tpagaPublicApiKey, int enviroment) {
+    protected TpagaAPI(String tpagaPublicApiKey, int enviroment) {
         this.tpagaPublicApiKey = tpagaPublicApiKey;
         this.enviroment = enviroment;
         mManageCreditCard = getAuthAdapter().create(ManageCreditCard.class);
@@ -41,7 +41,7 @@ public class TpagaAPI {
         return new TpagaAPI(tpagaPublicApiKey, enviroment);
     }
 
-    private Retrofit getAuthAdapter() {
+    protected Retrofit getAuthAdapter() {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();

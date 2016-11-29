@@ -9,8 +9,8 @@ import android.widget.Toast;
 
 import co.tpaga.tpagasdk.Entities.CreditCardTpaga;
 import co.tpaga.tpagasdk.Entities.CreditCardWallet;
-import co.tpaga.tpagasdk.Fragment.AddCreditCardFragment;
-import co.tpaga.tpagasdk.Fragment.AddCreditCardView;
+import co.tpaga.tpagasdk.FragmentCreditCard.AddCreditCardFragment;
+import co.tpaga.tpagasdk.FragmentCreditCard.AddCreditCardView;
 import co.tpaga.tpagasdk.GenericResponse;
 import co.tpaga.tpagasdk.StatusResponse;
 
