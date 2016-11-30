@@ -14,7 +14,7 @@ import co.tpaga.tpagasdk.FragmentCreditCard.AddCreditCardView;
 import co.tpaga.tpagasdk.GenericResponse;
 import co.tpaga.tpagasdk.StatusResponse;
 
-public class AddCreditCardWithFragmentActivity extends AppCompatActivity implements AddCreditCardView {
+public class AddCreditCardWithFragmentActivity extends AppCompatActivity implements AddCreditCardView.UserActionsListener {
 
     private AddCreditCardFragment mAddCreditCardFragment;
 

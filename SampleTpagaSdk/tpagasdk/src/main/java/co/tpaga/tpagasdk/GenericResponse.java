@@ -1,8 +1,5 @@
 package co.tpaga.tpagasdk;
 
-/**
- * Created by Antonio Vanegas @hpsaturn on 2/23/16.
- */
 public class GenericResponse {
 
     public StatusResponse status;
