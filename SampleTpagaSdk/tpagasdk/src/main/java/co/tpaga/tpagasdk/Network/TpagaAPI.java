@@ -17,9 +17,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 
-/**
- * Created by TPaga on 8/30/16.
- */
 public class TpagaAPI {
 
     public static final int SANDBOX = 1000;
