@@ -1,10 +1,43 @@
 ## Tpaga android-sdk
---description sdk
-### Latest release
---coming soon :P 
-## Get Started
 
-### 
+Tpaga SDK allows your application connect with the Tpaga API to create new tokens which represents a credit cards. Have two options to generate credit card tokens. The first include a fragment where you can to write the credit card data or scan it. 
+The other option is to make the request to the Tpaga API. Both return a credit card token. You can show a implementation example here [Example Tpaga SDK](https://github.com/AdelaTpaga/android-sdk/tree/master/SampleTpagaSdk/app)  
+
+### Latest release
+
+The most recent release is tpagasdk 1.0.5, released December 1, 2016 
+
+### Get Started
+
+1. Add depencency: 
+
+-Using Maven add the following
+
+```
+<dependency>
+  <groupId>co.tpaga</groupId>
+  <artifactId>tpagasdk</artifactId>
+  <version>1.0.5</version>
+  <type>pom</type>
+</dependency>
+```
+
+-Using Gradle
+
+```
+dependencies{
+  compile 'co.tpaga:tpagasdk:1.0.4'
+}
+```
+
+-Using Ivy
+
+```
+<dependency org='co.tpaga' name='tpagasdk' rev='1.0.5'>
+  <artifact name='tpagasdk' ext='pom' />
+</dependency>
+```
+
 
 1. Download and import tpagasdk module into project
 
