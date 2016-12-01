@@ -1,4 +1,29 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'tpagasdk'
+    bintrayOrg = 'tpaga'
+    versionName = "1.0.5"
+
+    publishedGroupId = 'co.tpaga'
+    libraryName = 'tpagasdk'
+    artifact = 'tpagasdk'
+
+    libraryDescription = 'Tpaga library for Android'
+
+    libraryVersion = '1.0.5'
+
+    developerId = 'leinaro'
+    developerName = 'Adela Rojas'
+    developerEmail = 'arojas@tpaga.co'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
 
 android {
     compileSdkVersion 24
@@ -7,8 +32,8 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 24
-        versionCode 1
-        versionName "1.0"
+        versionCode 5
+        versionName "1.0.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -59,4 +84,90 @@ dependencies {
     testCompile "org.powermock:powermock-module-junit4:1.6.5"
     testCompile "org.powermock:powermock-api-mockito:1.6.5"
 
+}
+
+group = publishedGroupId
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'aar'
+                groupId publishedGroupId
+                artifactId artifact
+
+                // Add your description here
+                name libraryName
+                description libraryDescription
+
+                // Set your license
+                licenses {
+                    license {
+                        name licenseName
+                        url licenseUrl
+                    }
+                }
+                developers {
+                    developer {
+                        id developerId
+                        name developerName
+                        email developerEmail
+                    }
+                }
+            }
+        }
+    }
+}
+
+version = libraryVersion
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    description "app javadocs"
+    source = android.libraryVariants["release"].javaCompile.source
+    ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
+    classpath = files(android.libraryVariants["release"].javaCompile.classpath.files) + files(ext.androidJar)
+    options.links("http://docs.oracle.com/javase/7/docs/api/");
+    options.links("http://d.android.com/reference/");
+    exclude '**/BuildConfig.java'
+    exclude '**/R.java'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+bintray {
+    user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
+    key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
+    // jFrog plugin must be declared for this line to work
+    configurations = ['archives']
+    // Package info for BinTray
+
+    pkg {
+        repo = bintrayRepo
+        name = bintrayName
+        userOrg = bintrayOrg
+        desc = libraryDescription
+        licenses = allLicenses
+        publish = true
+        publicDownloadNumbers = true
+//        vcsUrl = 'https://github.com/bintray/gradle-bintray-plugin.git'
+        version {
+            name = bintrayName
+            desc = libraryDescription
+            vcsTag = '1.0.5'
+        }
+    }
 }

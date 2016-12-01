@@ -24,8 +24,6 @@ import co.tpaga.tpagasdk.Entities.CreditCardTpaga;
 import co.tpaga.tpagasdk.R;
 import co.tpaga.tpagasdk.Tpaga;
 import co.tpaga.tpagasdk.TpagaTools;
-import io.card.payment.CardIOActivity;
-import io.card.payment.CreditCard;
 
 public class AddCreditCardFragment extends Fragment implements AddCreditCardView.View, View.OnClickListener, TextWatcher {
     public static final String TAG = AddCreditCardFragment.class.getSimpleName();
@@ -210,25 +208,22 @@ public class AddCreditCardFragment extends Fragment implements AddCreditCardView
         switch (requestCode) {
             case Tpaga.SCAN_CREDIT_CARD:
                 if (resultCode == 13274388) {
-                    resultCreditCard(data);
+                    onResultScanCreditCard(Tpaga.onActivityResultScanCreditCard(data));
                 }
                 break;
         }
     }
 
-    private void resultCreditCard(Intent data) {
-        if (data != null || data.hasExtra(CardIOActivity.EXTRA_SCAN_RESULT)) {
-            CreditCard scanResult = data.getParcelableExtra(CardIOActivity.EXTRA_SCAN_RESULT);
-            cc_number.setText(scanResult.getFormattedCardNumber());
-
-            if (scanResult.isExpiryValid()) {
-                month.setText(scanResult.expiryMonth);
-                year.setText(scanResult.expiryYear);
-            }
-
-            if (scanResult.cvv != null) {
-                cvv.setText(scanResult.cvv);
-            }
+    public void onResultScanCreditCard(CreditCardTpaga creditCardTpaga) {
+        cc_number.setText(creditCardTpaga.primaryAccountNumber);
+        if (creditCardTpaga.expirationYear != null && !creditCardTpaga.expirationYear.isEmpty()) {
+            year.setText(creditCardTpaga.expirationYear);
+        }
+        if (creditCardTpaga.expirationMonth != null && !creditCardTpaga.expirationMonth.isEmpty()) {
+            month.setText(creditCardTpaga.expirationMonth);
+        }
+        if (creditCardTpaga.cvc != null && !creditCardTpaga.cvc.isEmpty()) {
+            cvv.setText(creditCardTpaga.cvc);
         }
     }
 }

@@ -26,7 +26,7 @@ public interface AddCreditCardView {
         void showToastMsg();
 
         void clear();
-        
+
         CreditCardTpaga getCC();
     }
 

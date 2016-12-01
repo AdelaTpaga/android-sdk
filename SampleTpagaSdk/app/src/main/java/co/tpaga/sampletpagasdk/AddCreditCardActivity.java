@@ -1,5 +1,6 @@
 package co.tpaga.sampletpagasdk;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -142,5 +143,31 @@ public class AddCreditCardActivity extends AppCompatActivity implements AddCredi
     @Override
     public CreditCardTpaga getCreditCard() {
         return getCC();
+    }
+
+    public void onResultScanCreditCard(CreditCardTpaga creditCardTpaga) {
+        cc_number.setText(creditCardTpaga.primaryAccountNumber);
+        if (creditCardTpaga.expirationYear != null && !creditCardTpaga.expirationYear.isEmpty()) {
+            year.setText(creditCardTpaga.expirationYear);
+        }
+        if (creditCardTpaga.expirationMonth != null && !creditCardTpaga.expirationMonth.isEmpty()) {
+            month.setText(creditCardTpaga.expirationMonth);
+        }
+        if (creditCardTpaga.cvc != null && !creditCardTpaga.cvc.isEmpty()) {
+            cvv.setText(creditCardTpaga.cvc);
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case Tpaga.SCAN_CREDIT_CARD:
+                if (resultCode == 13274388) {
+                    onResultScanCreditCard(Tpaga.onActivityResultScanCreditCard(data));
+                }
+                break;
+        }
     }
 }

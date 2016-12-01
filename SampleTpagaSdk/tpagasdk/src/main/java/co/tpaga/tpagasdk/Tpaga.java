@@ -7,6 +7,7 @@ import android.content.Intent;
 import co.tpaga.tpagasdk.Entities.CreditCardTpaga;
 import co.tpaga.tpagasdk.Network.TpagaAPI;
 import io.card.payment.CardIOActivity;
+import io.card.payment.CreditCard;
 
 public class Tpaga {
 
@@ -40,5 +41,25 @@ public class Tpaga {
                 && TpagaTools.isValidExpirationDate(creditCard.expirationYear, creditCard.expirationMonth)
                 && !creditCard.cvc.isEmpty()
                 && TpagaTools.isNameValid(creditCard.cardHolderName);
+    }
+
+    public static CreditCardTpaga onActivityResultScanCreditCard(Intent data) {
+        try {
+            if (data != null || data.hasExtra(CardIOActivity.EXTRA_SCAN_RESULT)) {
+                CreditCard scanResult = data.getParcelableExtra(CardIOActivity.EXTRA_SCAN_RESULT);
+
+                CreditCardTpaga creditCardTpaga = CreditCardTpaga.create(
+                        scanResult.getFormattedCardNumber(),
+                        (scanResult.isExpiryValid()) ? scanResult.expiryYear + "" : "",
+                        (scanResult.isExpiryValid()) ? scanResult.expiryMonth + "" : "",
+                        (scanResult.cvv != null) ? scanResult.cvv : "",
+                        "");
+
+                return creditCardTpaga;
+            }
+            return null;
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
