@@ -43,7 +43,14 @@ dependencies {
  }
 ```
 
-2. Initialize Tpaga SDK
+2. Add permissions in the manifest
+```
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+```
+
+3. Initialize Tpaga SDK
 
 In the Activity or Application file initialize tpagasdk. Set your public key and select environment.
 Use your `public_api_key` to initialize. This key is in your dashboard [sandbox](https://sandbox.tpaga.co)/[production](https://api.tpaga.co/). The enviroment can be `TpagaAPI.SANDBOX` OR `TpagaAPI.PRODUCTION`. You must check that the added public_api_key matches the selected environment.
@@ -113,4 +120,39 @@ To customize AddCreditCardFragment you can overwrite the next styles
 <style name="title_style"></style>
 <style name="default_edit_text_style" parent="@style/Base.Widget.AppCompat.EditText"></style>
 ```
+
+Second option without AddCreditCardFragment
+
+- In your activity create a `AddCreditCardPresenter` instance;
+```
+AddCreditCardPresenter mAddCreditCardPresenter = new AddCreditCardPresenter(this, Tpaga.tpagaApi);
+```
+
+- Implements `AddCreditCardView.UserActionsListener` and override methods
+```
+@Override
+public CreditCardTpaga getCreditCard() {
+    return CreditCardTpaga.create("number", "year", "month", "cvv", "name");
+}
+```
+
+- Call `mAddCreditCardPresenter.tokenizeCreditCard();` to request card token
+
+- Optionaly you must use `Tpaga.scanCard(this)` to start scan credit card intent and in `onActivityResult` method add the next lines. Where `Tpaga.onActivityResultScanCreditCard(data)` return a `CreditCardTpaga` object
+```
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    switch (requestCode) {
+        case Tpaga.SCAN_CREDIT_CARD:
+            if (resultCode == 13274388) {
+                onResultScanCreditCard(Tpaga.onActivityResultScanCreditCard(data));
+            }
+            break;
+    }
+}
+```
+
+
+
 
