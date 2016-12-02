@@ -11,8 +11,7 @@ The most recent release is tpagasdk 1.0.5, released December 1, 2016
 
 1. Add depencency: 
 
--Using Maven add the following
-
+- Using Maven add the following
 ```
 <dependency>
   <groupId>co.tpaga</groupId>
@@ -22,23 +21,21 @@ The most recent release is tpagasdk 1.0.5, released December 1, 2016
 </dependency>
 ```
 
--Using Gradle
-
+- Using Gradle
 ```
 dependencies{
   compile 'co.tpaga:tpagasdk:1.0.4'
 }
 ```
 
--Using Ivy
-
+- Using Ivy
 ```
 <dependency org='co.tpaga' name='tpagasdk' rev='1.0.5'>
   <artifact name='tpagasdk' ext='pom' />
 </dependency>
 ```
 
-> 1. Other option is download and import the module [tpagasdk](https://github.com/AdelaTpaga/android-sdk/tree/master/SampleTpagaSdk/tpagasdk) into your project.
+>1. Other option is download and import the module [tpagasdk](https://github.com/AdelaTpaga/android-sdk/tree/master/SampleTpagaSdk/tpagasdk) into your project.
 2. Add `compile project(":tpagasdk")` in your app build.gradle
 ```
 dependencies {
@@ -46,65 +43,74 @@ dependencies {
  }
 ```
 
+2. Initialize Tpaga SDK
 
-2. In the Activity or Application file initialize tpagasdk. Set your public key and select environment. 
- Use your `public_api_key` to initialize. This key is in your dashboard [sandbox](https://sandbox.tpaga.co)/[production](https://api.tpaga.co/).
- 
- 
- 
+In the Activity or Application file initialize tpagasdk. Set your public key and select environment.
+Use your `public_api_key` to initialize. This key is in your dashboard [sandbox](https://sandbox.tpaga.co)/[production](https://api.tpaga.co/). The enviroment can be `TpagaAPI.SANDBOX` OR `TpagaAPI.PRODUCTION`. You must check that the added public_api_key matches the selected environment.
+
 ```
 Tpaga.initialize("public_api_key"), TpagaAPI.SANDBOX);
 ```
 
+### Add Credit Card
 
+First option is use AddCreditCardFragment to add credit cards
 
-
-
-
-Add Credit Card
-
-
-there are two options to add credit cards
-
-
-Add AddCreditCardFragment fragment in your activity
+- Add `AddCreditCardFragment` fragment in your activity
 ```
 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 AddCreditCardFragment mAddCreditCardFragment = new AddCreditCardFragment();
-ft.add(R.id.content_default, fragment, fragmentTag);
-ft.addToBackStack(fragmentTag);
+ft.add(R.id.content_default, mAddCreditCardFragment, fragmentTag);
 ft.commitAllowingStateLoss();
 ```
-Your activity must implements AddCreditCardView and override saveCreditCardSuccess method
 
-
-This method is execute if fields in fragment are correct 
+- Your activity must implement `AddCreditCardView.UserActionsListener` and override methods.
 ```
+//This method is execute if fields in fragment are correct 
 @Override
-    public void saveCreditCardSuccess(Account account) {
-      //Your code
-    }
-
-```
-
+public void onResponseSuccessfulOfAddCreditCard(CreditCardWallet creditCardWallet) {
+    /**
+     * you must send the creditCardWallet.tempCcToken to your server to use in payments
+     */
+}
 
 @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        mAddCreditCardFragment.onActivityResult(requestCode, resultCode, data);
+public void showError(Throwable t) {
+    Toast.makeText(this, "credit card Throwable error", Toast.LENGTH_LONG).show();
+    t.printStackTrace();
+}
+
+@Override
+public void showError(GenericResponse genericResponse) {
+    showToastError(genericResponse.status);
+}
+
+@Override
+public void showToastError(StatusResponse response) {
+    if (response != null && !response.responseMessage.isEmpty()) {
+        Toast.makeText(this, response.responseMessage, Toast.LENGTH_LONG).show();
     }
+}
 
+@Override
+public CreditCardTpaga getCreditCard() {
+    return mAddCreditCardFragment.getCC();
+}
+```
 
+- Add `mAddCreditCardFragment.onActivityResult(requestCode, resultCode, data);` In the onActivityResult, this to update fragment when scan card.
+```
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    mAddCreditCardFragment.onActivityResult(requestCode, resultCode, data);
+}
+```
 
-
-Customize AddCreditCardFragment
-
-
-Override the styles in from project
-
-
+To customize AddCreditCardFragment you can overwrite the next styles
+```
 <style name="button_red" parent="Theme.AppCompat.Light"></style>
 <style name="title_style"></style>
 <style name="default_edit_text_style" parent="@style/Base.Widget.AppCompat.EditText"></style>
-
+```
 
