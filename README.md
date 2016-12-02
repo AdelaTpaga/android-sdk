@@ -38,31 +38,27 @@ dependencies{
 </dependency>
 ```
 
-> 1. Other option is download and import the module [https://github.com/AdelaTpaga/android-sdk/tree/master/SampleTpagaSdk/tpagasdk](tpagasdk) into your project.
-> 2. Add ‘compile project(":tpagasdk")’ in your app build.gradle
-
-
+> 1. Other option is download and import the module [tpagasdk](https://github.com/AdelaTpaga/android-sdk/tree/master/SampleTpagaSdk/tpagasdk) into your project.
+2. Add `compile project(":tpagasdk")` in your app build.gradle
 ```
 dependencies {
- .
- .
     compile project(":tpagasdk")
- .
- .
  }
 ```
-3. In the Activity or Application file initialize tpagasdk. Set your context, public key and select environment.
 
 
+2. In the Activity or Application file initialize tpagasdk. Set your public key and select environment. 
+ Use your `public_api_key` to initialize. This key is in your dashboard [sandbox](https://sandbox.tpaga.co)/[production](https://api.tpaga.co/).
+ 
+ 
+ 
 ```
-TpagaAPI apiTpaga = new TpagaAPI(this, getResources().getString(R.string.tpaga_public_api_key), TpagaAPI.SANDBOX);
+Tpaga.initialize("public_api_key"), TpagaAPI.SANDBOX);
 ```
 
 
-Use your project public_api_key to initialize  
 
 
-You found the key in your dashboard in https://tpaga.co/
 
 
 Add Credit Card
