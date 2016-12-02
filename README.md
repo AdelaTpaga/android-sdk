@@ -38,11 +38,8 @@ dependencies{
 </dependency>
 ```
 
-
-1. Download and import tpagasdk module into project
-
-
-2. Add ‘compile project(":tpagasdk")’ in your app build.gradle
+> 1. Other option is download and import the module [https://github.com/AdelaTpaga/android-sdk/tree/master/SampleTpagaSdk/tpagasdk](tpagasdk) into your project.
+> 2. Add ‘compile project(":tpagasdk")’ in your app build.gradle
 
 
 ```
