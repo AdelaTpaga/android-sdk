@@ -10,7 +10,7 @@ import java.io.IOException;
 
 import co.tpaga.tpagasdk.Entities.CreditCardTpaga;
 import co.tpaga.tpagasdk.Entities.CreditCardWallet;
-import co.tpaga.tpagasdk.GenericResponse;
+import co.tpaga.tpagasdk.Tools.GenericResponse;
 import co.tpaga.tpagasdk.Network.MockService;
 import co.tpaga.tpagasdk.Network.TpagaAPI;
 

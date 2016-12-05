@@ -2,8 +2,8 @@ package co.tpaga.tpagasdk.FragmentCreditCard;
 
 import co.tpaga.tpagasdk.Entities.CreditCardTpaga;
 import co.tpaga.tpagasdk.Entities.CreditCardWallet;
-import co.tpaga.tpagasdk.GenericResponse;
-import co.tpaga.tpagasdk.StatusResponse;
+import co.tpaga.tpagasdk.Tools.GenericResponse;
+import co.tpaga.tpagasdk.Tools.StatusResponse;
 
 public interface AddCreditCardView {
 

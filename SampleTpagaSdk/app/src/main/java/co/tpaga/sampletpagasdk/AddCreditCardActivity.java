@@ -20,10 +20,10 @@ import co.tpaga.tpagasdk.Entities.CreditCardTpaga;
 import co.tpaga.tpagasdk.Entities.CreditCardWallet;
 import co.tpaga.tpagasdk.FragmentCreditCard.AddCreditCardPresenter;
 import co.tpaga.tpagasdk.FragmentCreditCard.AddCreditCardView;
-import co.tpaga.tpagasdk.GenericResponse;
-import co.tpaga.tpagasdk.StatusResponse;
+import co.tpaga.tpagasdk.Tools.GenericResponse;
+import co.tpaga.tpagasdk.Tools.StatusResponse;
 import co.tpaga.tpagasdk.Tpaga;
-import co.tpaga.tpagasdk.TpagaTools;
+import co.tpaga.tpagasdk.Tools.TpagaTools;
 
 public class AddCreditCardActivity extends AppCompatActivity implements AddCreditCardView.UserActionsListener {
 

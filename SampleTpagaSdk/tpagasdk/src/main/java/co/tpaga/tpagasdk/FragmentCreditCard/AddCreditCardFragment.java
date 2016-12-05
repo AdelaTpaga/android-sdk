@@ -22,8 +22,10 @@ import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import co.tpaga.tpagasdk.Entities.CreditCardTpaga;
 import co.tpaga.tpagasdk.R;
+import co.tpaga.tpagasdk.Tools.TpagaTools;
 import co.tpaga.tpagasdk.Tpaga;
-import co.tpaga.tpagasdk.TpagaTools;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class AddCreditCardFragment extends Fragment implements AddCreditCardView.View, View.OnClickListener, TextWatcher {
     public static final String TAG = AddCreditCardFragment.class.getSimpleName();
@@ -53,6 +55,9 @@ public class AddCreditCardFragment extends Fragment implements AddCreditCardView
         initDependences(view);
         setSpinnerYears();
         setSpinnerMonths();
+
+        checkNotNull(Tpaga.tpagaApi, "YOU MUST INITIALIZE THE TPAGA SDK IN YOUR MAIN ACTIVITY");
+
         return view;
     }
 
@@ -195,8 +200,8 @@ public class AddCreditCardFragment extends Fragment implements AddCreditCardView
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            mAddCreditCardView = (AddCreditCardView.UserActionsListener) context;
-            mAddCreditCardPresenter = new AddCreditCardPresenter(mAddCreditCardView, Tpaga.tpagaApi);
+            mAddCreditCardView = (AddCreditCardView.UserActionsListener) getActivity();
+            mAddCreditCardPresenter = new AddCreditCardPresenter(mAddCreditCardView, checkNotNull(Tpaga.tpagaApi, "TpagaApi cannot be null"));
             mAddCreditCardPresenter.addCreditCardView(this);
         } catch (ClassCastException castException) {
             /** The activity does not implement the AddCreditCardView listener. */

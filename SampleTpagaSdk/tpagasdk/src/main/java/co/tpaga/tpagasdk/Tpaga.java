@@ -3,11 +3,15 @@ package co.tpaga.tpagasdk;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 
 import co.tpaga.tpagasdk.Entities.CreditCardTpaga;
 import co.tpaga.tpagasdk.Network.TpagaAPI;
+import co.tpaga.tpagasdk.Tools.TpagaTools;
 import io.card.payment.CardIOActivity;
 import io.card.payment.CreditCard;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class Tpaga {
 
@@ -18,8 +22,8 @@ public class Tpaga {
 
     }
 
-    public static Tpaga initialize(String tpagaPublicApiKey, int enviroment) {
-        return new Tpaga(tpagaPublicApiKey, enviroment);
+    public static Tpaga initialize(@NonNull String tpagaPublicApiKey, @NonNull int environment) {
+        return new Tpaga(checkNotNull(tpagaPublicApiKey, "Tpaga public_api_key cannot be null"), checkNotNull(environment, "Tpaga environment cannot be null"));
     }
 
     /*request code for scan card*/

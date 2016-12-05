@@ -6,7 +6,7 @@ ext {
     bintrayRepo = 'maven'
     bintrayName = 'tpagasdk'
     bintrayOrg = 'tpaga'
-    versionName = "1.0.5"
+    versionName = "1.0.7"
 
     publishedGroupId = 'co.tpaga'
     libraryName = 'tpagasdk'
@@ -14,7 +14,7 @@ ext {
 
     libraryDescription = 'Tpaga library for Android'
 
-    libraryVersion = '1.0.5'
+    libraryVersion = '1.0.7'
 
     developerId = 'leinaro'
     developerName = 'Adela Rojas'
@@ -32,8 +32,8 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 24
-        versionCode 5
-        versionName "1.0.5"
+        versionCode 7
+        versionName "1.0.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -142,11 +142,22 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     from javadoc.destinationDir
 }
+//
+//artifacts {
+//    archives javadocJar
+//    archives sourcesJar
+//}
 
-artifacts {
-    archives javadocJar
-    archives sourcesJar
-}
+//publishing {
+//    publications {
+//        MyPublication(MavenPublication) {
+//            from components.java
+//            groupId publishedGroupId
+//            artifactId artifact
+//            version '1.0.7'
+//        }
+//    }
+//}
 
 bintray {
     user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
@@ -154,6 +165,7 @@ bintray {
     // jFrog plugin must be declared for this line to work
     configurations = ['archives']
     // Package info for BinTray
+//    publications = ['MyPublication']
 
     pkg {
         repo = bintrayRepo
@@ -163,11 +175,11 @@ bintray {
         licenses = allLicenses
         publish = true
         publicDownloadNumbers = true
-//        vcsUrl = 'https://github.com/bintray/gradle-bintray-plugin.git'
+        vcsUrl = 'https://github.com/AdelaTpaga/android-sdk.git'
         version {
-            name = bintrayName
+            name = versionName
             desc = libraryDescription
-            vcsTag = '1.0.5'
+            vcsTag = '1.0.7'
         }
     }
 }
